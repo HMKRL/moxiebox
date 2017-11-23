@@ -9,3 +9,9 @@ tests/exit0
 tests/exit1
 tests/rtlib
 tests/sha256
+*/cscope*
+tests/sandboxrt.h
+tests/fib-recursive
+tests/fib-iterative
+tests/fib-tail
+tests/fib-qmat

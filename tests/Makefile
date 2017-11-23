@@ -20,7 +20,13 @@ TESTS = \
 	rtlib \
 	sha256
 
-all: $(TESTS)
+FIBS = \
+	fib-recursive \
+	fib-iterative \
+	fib-tail \
+	fib-qmat
+
+all: $(TESTS) $(FIBS)
 
 %: %.c
 	$(MOX_CC) $(CFLAGS) -c $<
@@ -36,6 +42,15 @@ else
 	PRINTF = env printf
 endif
 
+fib: $(FIBS)
+
+fib_test: fib
+	@for t in $(FIBS); do \
+		$(MOX_SIZE) $$t; \
+		./run-fib.sh $$t && \
+		$(PRINTF) "\t$(PASS_COLOR)[ $$t ]$(NO_COLOR)\n\n"; \
+	done
+
 check: $(TESTS)
 	@for t in $(TESTS); do \
 		$(MOX_SIZE) $$t; \
@@ -44,6 +59,6 @@ check: $(TESTS)
 	done
 
 clean:
-	$(RM) *.o $(TESTS)
+	$(RM) *.o $(TESTS) $(FIBS)
 
 -include ../config.mk
