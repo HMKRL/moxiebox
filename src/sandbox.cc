@@ -418,8 +418,12 @@ static int gdb_main_loop(uint32_t &gdbPort, machine &mach)
                 case 'c':
                     wrc = write(newsockfd, "+", 1);
                     sim_resume(mach);
-                    // FIXME.. assuming BREAK for now
-                    sendGdbReply(newsockfd, "S05");
+
+                    /* send correct signal to remote gdb */
+                    word2hex(reply, mach.cpu.asregs.exception);
+                    reply[5] = 'S';
+                    sendGdbReply(newsockfd, &reply[5]);
+
                     mach.cpu.asregs.regs[16] -= 2;
                     i += 4;
 
