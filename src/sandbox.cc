@@ -444,8 +444,9 @@ static int gdb_main_loop(uint32_t &gdbPort, machine &mach)
                     uint32_t addr = readDelimitedHexValue(buffer, &++i);
                     uint32_t length = readDelimitedHexValue(buffer, &i);
                     char *p = (char *) mach.physaddr(addr, length);
-                    if (!p) { /*FIXME: implement error handling */
-                        sprintf(reply, "OK");
+                    if (!p) {
+                        word2hex(reply, errno);
+                        strncpy(reply, &reply[6], 3);
                         goto cmd_m_out;
                     }
                     reply[0] = 0;
